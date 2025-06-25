@@ -1,0 +1,114 @@
+import axios from 'axios';
+
+const API_BASE_URL = 'http://localhost:5000/api';
+
+// Create axios instance with default config
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+// Add request interceptor to include auth credentials
+api.interceptors.request.use(
+  (config) => {
+    const userEmail = localStorage.getItem('userEmail');
+    const userPassword = localStorage.getItem('userPassword');
+    
+    if (userEmail && userPassword) {
+      config.headers['X-User-Email'] = userEmail;
+      config.headers['X-User-Password'] = userPassword;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Auth APIs
+export const login = async (email, password) => {
+  const response = await api.post('/auth/login', { email, password });
+  return response.data;
+};
+
+export const signup = async (username, email, password) => {
+  const response = await api.post('/auth/register', { username, email, password });
+  return response.data;
+};
+
+// Quiz APIs
+export const getQuizList = async () => {
+  const response = await api.get('/quiz-list');
+  return response.data;
+};
+
+export const getQuizById = async (quizId) => {
+  const response = await api.get(`/${quizId}`);
+  return response.data;
+};
+
+export const submitQuiz = async (courseId, answers, timeSpent) => {
+  try {
+    const userEmail = localStorage.getItem('userEmail');
+    const userPassword = localStorage.getItem('userPassword');
+    
+    if (!userEmail || !userPassword) {
+      throw new Error('User credentials not found');
+    }
+    
+    const response = await api.post(`/courses/${courseId}/submit`, {
+      answers,
+      timeSpent
+    }, {
+      headers: {
+        'X-User-Email': userEmail,
+        'X-User-Password': userPassword
+      }
+    });
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error submitting quiz:', error);
+    throw error;
+  }
+};
+
+export const getLeaderboard = async (quizId) => {
+  const response = await api.get(`/${quizId}/leaderboard`);
+  return response.data;
+};
+
+export const createQuiz = async (quizData) => {
+  const response = await api.post('/quiz/create', quizData);
+  return response.data;
+};
+
+export const getUserProfile = async () => {
+  const response = await api.get('/user/profile');
+  return response.data;
+};
+
+export const updateUserProfile = async (profileData) => {
+  const response = await api.put('/user/profile', profileData);
+  return response.data;
+};
+
+export const getQuizHistory = async () => {
+  const response = await api.get('/user/quiz-history');
+  return response.data;
+};
+
+export default {
+  login,
+  signup,
+  getQuizList,
+  getQuizById,
+  submitQuiz,
+  getLeaderboard,
+  createQuiz,
+  getUserProfile,
+  updateUserProfile,
+  getQuizHistory
+}; 
