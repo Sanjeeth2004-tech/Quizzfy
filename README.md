@@ -1,4 +1,4 @@
-# Quiz Application (MERN Stack)
+# Quizzfy (MERN Stack)
 
 A **"Quiz Application"** built using the **MERN stack** (MongoDB, Express.js, React, Node.js). Users can create, share, and take quizzes — with features like quiz history,achievements,attempting tests and custom quiz creations.
 
