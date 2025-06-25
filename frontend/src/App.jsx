@@ -24,7 +24,7 @@ import QuizHistory from './components/QuizHistory.jsx';
 import QuizResults from './components/QuizResults.jsx';
 import Settings from './components/Settings.jsx';
 import Login from './components/Login.jsx';
-import Signup from './components/Signup.jsx';
+import Signup from './components/SignUp.jsx';
 import CreateQuiz from './components/CreateQuiz.jsx';
 import JoinTest from './components/JoinTest';
 import ProtectedRoute from './components/ProtectedRoutes';
